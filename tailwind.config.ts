@@ -47,15 +47,23 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+        xp: {
+          blue: "hsl(var(--xp-blue))",
+          'blue-dark': "hsl(var(--xp-blue-dark))",
+          'blue-light': "hsl(var(--xp-blue-light))",
+          green: "hsl(var(--xp-green))",
+          'green-dark': "hsl(var(--xp-green-dark))",
+        },
+        taskbar: {
+          'start-green': "hsl(var(--taskbar-start-green))",
+          'start-green-light': "hsl(var(--taskbar-start-green-light))",
+          blue: "hsl(var(--taskbar-blue))",
+          'blue-light': "hsl(var(--taskbar-blue-light))",
+        },
+        window: {
+          'title-start': "hsl(var(--window-title-start))",
+          'title-end': "hsl(var(--window-title-end))",
+          border: "hsl(var(--window-border))",
         },
       },
       borderRadius: {
@@ -84,6 +92,10 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "xp-fade-in": "xp-fade-in 0.5s ease-out",
+        "xp-loading": "xp-loading 2s linear infinite",
+        "xp-boot": "xp-boot 3s ease-in-out",
+        "window-open": "window-open 0.2s ease-out",
       },
     },
   },

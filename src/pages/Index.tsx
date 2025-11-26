@@ -1,13 +1,23 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { BootScreen } from "@/components/BootScreen";
+import { LoginScreen } from "@/components/LoginScreen";
+import { Desktop } from "@/components/Desktop";
 
 const Index = () => {
+  const [stage, setStage] = useState<'boot' | 'login' | 'desktop'>('boot');
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <>
+      {stage === 'boot' && (
+        <BootScreen onBootComplete={() => setStage('login')} />
+      )}
+      {stage === 'login' && (
+        <LoginScreen onLogin={() => setStage('desktop')} />
+      )}
+      {stage === 'desktop' && (
+        <Desktop />
+      )}
+    </>
   );
 };
 
