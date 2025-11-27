@@ -10,16 +10,16 @@ export const LoginScreen = ({ onLogin }: LoginScreenProps) => {
 
   const handleLogin = () => {
     setIsLoggingIn(true);
-    // Play startup sound
-    const audio = new Audio();
-    // We'll add the Windows startup sound URL here
+    // Play Windows startup sound
+    const audio = new Audio('/sounds/windows-startup.mp3');
+    audio.volume = 0.5;
     audio.play().catch(() => {
       // Silently fail if autoplay is blocked
     });
     
     setTimeout(() => {
       onLogin();
-    }, 1500);
+    }, 2000);
   };
 
   return (

@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { X, Minus, Square } from "lucide-react";
 
 interface WindowProps {
@@ -9,9 +9,21 @@ interface WindowProps {
   onFocus: () => void;
   initialX: number;
   initialY: number;
+  width?: number;
+  height?: number;
 }
 
-export const Window = ({ title, children, isActive, onClose, onFocus, initialX, initialY }: WindowProps) => {
+export const Window = ({ 
+  title, 
+  children, 
+  isActive, 
+  onClose, 
+  onFocus, 
+  initialX, 
+  initialY,
+  width = 600,
+  height = 400
+}: WindowProps) => {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -27,24 +39,30 @@ export const Window = ({ title, children, isActive, onClose, onFocus, initialX, 
     onFocus();
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isDragging) {
+        setPosition({
+          x: e.clientX - dragStart.x,
+          y: e.clientY - dragStart.y,
+        });
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
     if (isDragging) {
-      setPosition({
-        x: e.clientX - dragStart.x,
-        y: e.clientY - dragStart.y,
-      });
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
     }
-  };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  // Add event listeners for dragging
-  if (isDragging) {
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-  }
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging, dragStart]);
 
   return (
     <div
@@ -52,7 +70,7 @@ export const Window = ({ title, children, isActive, onClose, onFocus, initialX, 
       style={{
         left: position.x,
         top: position.y,
-        width: '600px',
+        width: `${width}px`,
         maxWidth: 'calc(100vw - 40px)',
         maxHeight: 'calc(100vh - 80px)',
       }}
@@ -60,7 +78,7 @@ export const Window = ({ title, children, isActive, onClose, onFocus, initialX, 
     >
       {/* Title Bar */}
       <div
-        className={`h-8 px-2 flex items-center justify-between cursor-move select-none ${
+        className={`h-8 px-2 flex items-center justify-between cursor-move select-none rounded-t-sm ${
           isActive 
             ? 'bg-gradient-to-r from-window-title-start to-window-title-end' 
             : 'bg-gradient-to-r from-gray-400 to-gray-500'
@@ -88,14 +106,14 @@ export const Window = ({ title, children, isActive, onClose, onFocus, initialX, 
 
       {/* Menu Bar */}
       <div className="h-6 px-2 bg-secondary border-b border-border flex items-center gap-4">
-        <span className="text-xs">File</span>
-        <span className="text-xs">Edit</span>
-        <span className="text-xs">View</span>
-        <span className="text-xs">Help</span>
+        <span className="text-xs hover:underline cursor-pointer">File</span>
+        <span className="text-xs hover:underline cursor-pointer">Edit</span>
+        <span className="text-xs hover:underline cursor-pointer">View</span>
+        <span className="text-xs hover:underline cursor-pointer">Help</span>
       </div>
 
       {/* Content */}
-      <div className="overflow-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+      <div className="overflow-auto" style={{ maxHeight: `${height - 60}px` }}>
         {children}
       </div>
     </div>

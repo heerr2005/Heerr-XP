@@ -6,6 +6,10 @@ import { Desktop } from "@/components/Desktop";
 const Index = () => {
   const [stage, setStage] = useState<'boot' | 'login' | 'desktop'>('boot');
 
+  const handleShutdown = () => {
+    setStage('login');
+  };
+
   return (
     <>
       {stage === 'boot' && (
@@ -15,7 +19,7 @@ const Index = () => {
         <LoginScreen onLogin={() => setStage('desktop')} />
       )}
       {stage === 'desktop' && (
-        <Desktop />
+        <Desktop onShutdown={handleShutdown} />
       )}
     </>
   );
