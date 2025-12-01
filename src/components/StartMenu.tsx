@@ -14,7 +14,8 @@ import {
   ChevronRight,
   Instagram,
   Github,
-  Linkedin
+  Linkedin,
+  Gamepad2
 } from "lucide-react";
 import userAvatar from "@/assets/user-avatar.png";
 
@@ -34,22 +35,22 @@ export const StartMenu = ({ onClose, onOpenWindow, onShutdown }: StartMenuProps)
     { id: "media", label: "Media Player", subtitle: "", icon: Play, color: "text-green-500" },
     { id: "paint", label: "Paint", subtitle: "", icon: Paintbrush, color: "text-purple-500" },
     { id: "music", label: "Music Player", subtitle: "", icon: Music, color: "text-blue-400" },
+    { id: "minesweeper", label: "Minesweeper", subtitle: "Play a game", icon: Gamepad2, color: "text-red-500" },
   ];
 
   const rightMenuItems = [
     { id: "instagram", label: "Instagram", icon: Instagram, color: "text-pink-500", url: "https://instagram.com" },
     { id: "github", label: "Github", icon: Github, color: "text-gray-700", url: "https://github.com/heerr2005" },
     { id: "linkedin", label: "LinkedIn", icon: Linkedin, color: "text-blue-600", url: "https://www.linkedin.com/in/heerchotaliya" },
-    { id: "recent", label: "Recently Used", icon: ChevronRight, color: "text-blue-500", hasSubmenu: true },
     { id: "cmd", label: "Command Prompt", icon: Terminal, color: "text-gray-800" },
-    { id: "imageviewer", label: "Image Viewer", icon: Image, color: "text-green-600" },
+    { id: "imageviewer", label: "Pictures", icon: Image, color: "text-green-600" },
     { id: "resume", label: "My Resume", icon: FileText, color: "text-red-500" },
   ];
 
   const handleItemClick = (item: typeof leftMenuItems[0] | typeof rightMenuItems[0]) => {
     if ('url' in item && item.url) {
       window.open(item.url, '_blank');
-    } else if (item.id === "resume" || item.id === "projects" || item.id === "about" || item.id === "contact") {
+    } else if (item.id !== "recent") {
       onOpenWindow(item.id);
     }
     onClose();

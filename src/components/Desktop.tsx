@@ -4,8 +4,7 @@ import { Taskbar } from "./Taskbar";
 import { DesktopIcon } from "./DesktopIcon";
 import { Window } from "./Window";
 import { 
-  User, FileText, FolderOpen, Mail, Play, Paintbrush, 
-  Music, Image, Terminal, Gamepad2, Globe, Trash2, HardDrive
+  User, FileText, FolderOpen, Mail, Globe, Trash2, HardDrive
 } from "lucide-react";
 import { AboutMeContent } from "./windows/AboutMeContent";
 import { ResumeContent } from "./windows/ResumeContent";
@@ -36,15 +35,9 @@ export const Desktop = ({ onShutdown }: DesktopProps) => {
     { id: "resume", label: "My Resume", icon: FileText, iconColor: "text-red-400", x: 20, y: 110 },
     { id: "projects", label: "My Projects", icon: FolderOpen, iconColor: "text-yellow-400", x: 20, y: 200 },
     { id: "contact", label: "Contact Me", icon: Mail, iconColor: "text-yellow-300", x: 20, y: 290 },
-    { id: "media", label: "Media Player", icon: Play, iconColor: "text-blue-400", x: 20, y: 380 },
-    { id: "paint", label: "Paint", icon: Paintbrush, iconColor: "text-purple-400", x: 110, y: 20 },
-    { id: "music", label: "Music", icon: Music, iconColor: "text-green-400", x: 110, y: 110 },
-    { id: "imageviewer", label: "Pictures", icon: Image, iconColor: "text-green-300", x: 110, y: 200 },
-    { id: "cmd", label: "CMD", icon: Terminal, iconColor: "text-gray-300", x: 110, y: 290 },
-    { id: "minesweeper", label: "Minesweeper", icon: Gamepad2, iconColor: "text-red-500", x: 110, y: 380 },
-    { id: "internet", label: "Internet", icon: Globe, iconColor: "text-blue-500", x: 200, y: 20, url: "https://heer-chotaliya.vercel.app/" },
-    { id: "mycomputer", label: "My Computer", icon: HardDrive, iconColor: "text-gray-400", x: 200, y: 110 },
-    { id: "recyclebin", label: "Recycle Bin", icon: Trash2, iconColor: "text-gray-400", x: 200, y: 200 },
+    { id: "internet", label: "Internet", icon: Globe, iconColor: "text-blue-500", x: 20, y: 380, url: "https://heer-chotaliya.vercel.app/" },
+    { id: "mycomputer", label: "My Computer", icon: HardDrive, iconColor: "text-gray-400", x: 110, y: 20 },
+    { id: "recyclebin", label: "Recycle Bin", icon: Trash2, iconColor: "text-gray-400", x: 110, y: 110 },
   ];
 
   const handleIconDoubleClick = (iconId: string) => {
