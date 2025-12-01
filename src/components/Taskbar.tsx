@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { Volume2 } from "lucide-react";
+import { Volume2, Wifi, Shield } from "lucide-react";
 import { StartMenu } from "./StartMenu";
 
 interface TaskbarProps {
-  openWindows: { id: string; label: string }[];
+  openWindows: { id: string; label: string; isMinimized?: boolean }[];
+  activeWindow: string | null;
   onOpenWindow: (windowId: string) => void;
   onShutdown?: () => void;
   onWindowClick: (windowId: string) => void;
 }
 
-export const Taskbar = ({ openWindows, onOpenWindow, onShutdown, onWindowClick }: TaskbarProps) => {
+export const Taskbar = ({ openWindows, activeWindow, onOpenWindow, onShutdown, onWindowClick }: TaskbarProps) => {
   const [time, setTime] = useState(new Date());
   const [showStartMenu, setShowStartMenu] = useState(false);
 
@@ -44,45 +45,60 @@ export const Taskbar = ({ openWindows, onOpenWindow, onShutdown, onWindowClick }
         />
       )}
 
-      <div className="fixed bottom-0 left-0 right-0 h-10 bg-gradient-to-b from-taskbar-blue to-taskbar-blue-light border-t-2 border-xp-blue-light shadow-lg z-50">
-        <div className="h-full flex items-center px-1 gap-1">
+      <div className="fixed bottom-0 left-0 right-0 h-[30px] bg-gradient-to-b from-[#245edb] via-[#3f8cf3] to-[#245edb] border-t border-[#0c59d0] shadow-lg z-50">
+        <div className="h-full flex items-center px-0.5 gap-0.5">
           {/* Start Button */}
           <button
-            className={`h-8 px-3 rounded-sm bg-gradient-to-b from-taskbar-start-green-light to-taskbar-start-green hover:brightness-110 flex items-center gap-2 shadow-md transition-all hover:shadow-lg ${showStartMenu ? 'brightness-90' : ''}`}
+            className={`h-full px-2 bg-gradient-to-b from-[#5cb85c] via-[#3c943c] to-[#2d7b2d] hover:from-[#6fcf6f] hover:via-[#4fa94f] hover:to-[#3c943c] flex items-center gap-1.5 rounded-r-lg border-r border-[#2d7b2d] transition-all ${showStartMenu ? 'from-[#4fa94f] via-[#3c943c] to-[#2d7b2d]' : ''}`}
             onClick={() => setShowStartMenu(!showStartMenu)}
           >
             <div className="flex gap-0.5">
-              <div className="w-3 h-3 bg-gradient-to-br from-red-500 to-red-600 rounded-sm"></div>
-              <div className="w-3 h-3 bg-gradient-to-br from-green-500 to-green-600 rounded-sm"></div>
-              <div className="w-3 h-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-sm"></div>
-              <div className="w-3 h-3 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-sm"></div>
+              <div className="w-2.5 h-2.5 bg-gradient-to-br from-red-400 to-red-600 rounded-sm"></div>
+              <div className="w-2.5 h-2.5 bg-gradient-to-br from-green-400 to-green-600 rounded-sm"></div>
+              <div className="w-2.5 h-2.5 bg-gradient-to-br from-blue-400 to-blue-600 rounded-sm"></div>
+              <div className="w-2.5 h-2.5 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-sm"></div>
             </div>
-            <span className="text-white font-bold text-sm drop-shadow">start</span>
+            <span className="text-white font-bold text-sm italic drop-shadow-md">start</span>
           </button>
 
-          {/* Divider */}
-          <div className="w-px h-8 bg-xp-blue-light"></div>
+          {/* Quick Launch Divider */}
+          <div className="w-px h-5 bg-white/30 mx-1"></div>
 
           {/* Open Windows */}
-          <div className="flex gap-1 flex-1 overflow-x-auto">
+          <div className="flex gap-0.5 flex-1 overflow-x-auto px-1">
             {openWindows.map((window) => (
               <button
                 key={window.id}
-                className="h-8 px-3 min-w-[120px] max-w-[200px] bg-gradient-to-b from-xp-blue-light to-xp-blue hover:from-xp-blue hover:to-xp-blue-dark text-white text-xs font-medium rounded-sm shadow-md truncate"
+                className={`h-[22px] px-2 min-w-[140px] max-w-[180px] text-white text-xs font-medium rounded-sm truncate flex items-center gap-1 transition-all ${
+                  activeWindow === window.id && !window.isMinimized
+                    ? 'bg-gradient-to-b from-[#1c4eb5] to-[#2d66d4] shadow-inner border border-[#0a3a9c]'
+                    : 'bg-gradient-to-b from-[#3d7bf7] to-[#2b5fd9] hover:from-[#5a92ff] hover:to-[#3d7bf7] border border-transparent'
+                }`}
                 onClick={() => onWindowClick(window.id)}
               >
-                {window.label}
+                <span className="truncate">{window.label}</span>
               </button>
             ))}
           </div>
 
           {/* System Tray */}
-          <div className="flex items-center gap-2 px-2 h-8 bg-xp-blue/30 rounded-sm">
-            <Volume2 className="w-4 h-4 text-white" />
-            <div className="w-px h-4 bg-white/30"></div>
-            <span className="text-white text-xs font-medium">
-              {formatTime(time)}
-            </span>
+          <div className="flex items-center h-full px-2 bg-gradient-to-b from-[#0f7ad9] to-[#1665b8] border-l border-[#0a4d8c]">
+            <div className="flex items-center gap-2 mr-2">
+              <button className="p-0.5 hover:bg-white/10 rounded">
+                <Wifi className="w-4 h-4 text-white" />
+              </button>
+              <button className="p-0.5 hover:bg-white/10 rounded">
+                <Shield className="w-4 h-4 text-green-400" />
+              </button>
+              <button className="p-0.5 hover:bg-white/10 rounded">
+                <Volume2 className="w-4 h-4 text-white" />
+              </button>
+            </div>
+            <div className="border-l border-white/20 pl-2">
+              <span className="text-white text-xs font-medium">
+                {formatTime(time)}
+              </span>
+            </div>
           </div>
         </div>
 
