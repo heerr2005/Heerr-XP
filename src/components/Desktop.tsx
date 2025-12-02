@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import blissWallpaper from "@/assets/bliss-wallpaper.jpg";
 import { Taskbar } from "./Taskbar";
 import { DesktopIcon } from "./DesktopIcon";
@@ -29,16 +29,40 @@ interface WindowState {
 export const Desktop = ({ onShutdown }: DesktopProps) => {
   const [openWindows, setOpenWindows] = useState<WindowState[]>([]);
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const icons = [
-    { id: "about", label: "About Me", icon: User, iconColor: "text-orange-400", x: 20, y: 20 },
-    { id: "resume", label: "My Resume", icon: FileText, iconColor: "text-red-400", x: 20, y: 110 },
-    { id: "projects", label: "My Projects", icon: FolderOpen, iconColor: "text-yellow-400", x: 20, y: 200 },
-    { id: "contact", label: "Contact Me", icon: Mail, iconColor: "text-yellow-300", x: 20, y: 290 },
-    { id: "internet", label: "Internet", icon: Globe, iconColor: "text-blue-500", x: 20, y: 380, url: "https://heer-chotaliya.vercel.app/" },
-    { id: "mycomputer", label: "My Computer", icon: HardDrive, iconColor: "text-gray-400", x: 110, y: 20 },
-    { id: "recyclebin", label: "Recycle Bin", icon: Trash2, iconColor: "text-gray-400", x: 110, y: 110 },
-  ];
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Responsive icon positions
+  const getIconPositions = () => {
+    if (isMobile) {
+      return [
+        { id: "about", label: "About Me", icon: User, iconColor: "text-orange-400", x: 10, y: 10 },
+        { id: "resume", label: "My Resume", icon: FileText, iconColor: "text-red-400", x: 85, y: 10 },
+        { id: "projects", label: "My Projects", icon: FolderOpen, iconColor: "text-yellow-400", x: 160, y: 10 },
+        { id: "contact", label: "Contact Me", icon: Mail, iconColor: "text-yellow-300", x: 235, y: 10 },
+        { id: "internet", label: "Internet", icon: Globe, iconColor: "text-blue-500", x: 10, y: 90, url: "https://heer-chotaliya.vercel.app/" },
+        { id: "mycomputer", label: "My Computer", icon: HardDrive, iconColor: "text-gray-400", x: 85, y: 90 },
+        { id: "recyclebin", label: "Recycle Bin", icon: Trash2, iconColor: "text-gray-400", x: 160, y: 90 },
+      ];
+    }
+    return [
+      { id: "about", label: "About Me", icon: User, iconColor: "text-orange-400", x: 20, y: 20 },
+      { id: "resume", label: "My Resume", icon: FileText, iconColor: "text-red-400", x: 20, y: 110 },
+      { id: "projects", label: "My Projects", icon: FolderOpen, iconColor: "text-yellow-400", x: 20, y: 200 },
+      { id: "contact", label: "Contact Me", icon: Mail, iconColor: "text-yellow-300", x: 20, y: 290 },
+      { id: "internet", label: "Internet", icon: Globe, iconColor: "text-blue-500", x: 20, y: 380, url: "https://heer-chotaliya.vercel.app/" },
+      { id: "mycomputer", label: "My Computer", icon: HardDrive, iconColor: "text-gray-400", x: 110, y: 20 },
+      { id: "recyclebin", label: "Recycle Bin", icon: Trash2, iconColor: "text-gray-400", x: 110, y: 110 },
+    ];
+  };
+
+  const icons = getIconPositions();
 
   const handleIconDoubleClick = (iconId: string) => {
     const icon = icons.find(i => i.id === iconId);
@@ -163,6 +187,9 @@ export const Desktop = ({ onShutdown }: DesktopProps) => {
   };
 
   const getWindowSize = (windowId: string) => {
+    if (isMobile) {
+      return { width: window.innerWidth, height: window.innerHeight - 50 };
+    }
     const sizes: Record<string, { width: number; height: number }> = {
       about: { width: 750, height: 500 },
       resume: { width: 650, height: 550 },
@@ -199,6 +226,7 @@ export const Desktop = ({ onShutdown }: DesktopProps) => {
           x={icon.x}
           y={icon.y}
           onDoubleClick={() => handleIconDoubleClick(icon.id)}
+          isMobile={isMobile}
         />
       ))}
 
@@ -214,10 +242,11 @@ export const Desktop = ({ onShutdown }: DesktopProps) => {
             onClose={() => handleCloseWindow(windowState.id)}
             onFocus={() => setActiveWindow(windowState.id)}
             onMinimize={() => handleMinimizeWindow(windowState.id)}
-            initialX={150 + index * 30}
-            initialY={50 + index * 30}
+            initialX={isMobile ? 0 : 150 + index * 30}
+            initialY={isMobile ? 0 : 50 + index * 30}
             width={size.width}
             height={size.height}
+            isMobile={isMobile}
           >
             {getWindowContent(windowState.id)}
           </Window>
@@ -235,6 +264,7 @@ export const Desktop = ({ onShutdown }: DesktopProps) => {
         onOpenWindow={handleOpenWindow}
         onShutdown={onShutdown}
         onWindowClick={handleWindowClick}
+        isMobile={isMobile}
       />
     </div>
   );
