@@ -23,9 +23,10 @@ interface StartMenuProps {
   onClose: () => void;
   onOpenWindow: (windowId: string) => void;
   onShutdown: () => void;
+  isMobile?: boolean;
 }
 
-export const StartMenu = ({ onClose, onOpenWindow, onShutdown }: StartMenuProps) => {
+export const StartMenu = ({ onClose, onOpenWindow, onShutdown, isMobile }: StartMenuProps) => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const leftMenuItems = [
@@ -55,6 +56,71 @@ export const StartMenu = ({ onClose, onOpenWindow, onShutdown }: StartMenuProps)
     }
     onClose();
   };
+
+  if (isMobile) {
+    return (
+      <div className="absolute bottom-12 left-0 right-0 max-h-[70vh] bg-gradient-to-b from-xp-blue to-xp-blue-dark shadow-2xl overflow-hidden z-[100] animate-scale-in origin-bottom-left">
+        {/* Header with user */}
+        <div className="h-12 bg-gradient-to-r from-xp-blue-dark to-xp-blue px-3 flex items-center gap-3 border-b-2 border-xp-blue-light">
+          <div className="w-8 h-8 rounded-sm overflow-hidden border-2 border-white/50 shadow-md">
+            <img src={userAvatar} alt="Heer" className="w-full h-full object-cover" />
+          </div>
+          <span className="text-white font-bold text-sm drop-shadow-lg">Heer Chotaliya</span>
+        </div>
+
+        {/* Scrollable Content */}
+        <div className="bg-white max-h-[50vh] overflow-y-auto">
+          {/* Programs */}
+          <div className="py-1">
+            <div className="px-3 py-1 text-xs text-gray-500 font-semibold border-b border-gray-200">Programs</div>
+            {leftMenuItems.map((item) => (
+              <button
+                key={item.id}
+                className="w-full px-3 py-2.5 flex items-center gap-3 active:bg-xp-blue active:text-white transition-colors text-foreground"
+                onClick={() => handleItemClick(item)}
+              >
+                <item.icon className={`w-6 h-6 ${item.color}`} />
+                <span className="text-sm font-medium">{item.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Social & Tools */}
+          <div className="py-1 bg-card border-t border-gray-200">
+            <div className="px-3 py-1 text-xs text-gray-500 font-semibold">Social & Tools</div>
+            {rightMenuItems.map((item) => (
+              <button
+                key={item.id}
+                className="w-full px-3 py-2.5 flex items-center gap-3 active:bg-xp-blue active:text-white transition-colors text-foreground"
+                onClick={() => handleItemClick(item)}
+              >
+                <item.icon className={`w-5 h-5 ${item.color}`} />
+                <span className="text-sm font-medium">{item.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="h-12 bg-gradient-to-r from-xp-blue-dark to-xp-blue px-2 flex items-center justify-between border-t-2 border-xp-blue-light">
+          <button 
+            className="flex items-center gap-2 px-3 py-1.5 hover:bg-white/10 rounded transition-colors"
+            onClick={onShutdown}
+          >
+            <LogOut className="w-4 h-4 text-white" />
+            <span className="text-white text-xs font-medium">Log Off</span>
+          </button>
+          <button 
+            className="flex items-center gap-2 px-3 py-1.5 hover:bg-white/10 rounded transition-colors"
+            onClick={onShutdown}
+          >
+            <Power className="w-4 h-4 text-red-400" />
+            <span className="text-white text-xs font-medium">Shut Down</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="absolute bottom-10 left-0 w-[400px] bg-gradient-to-b from-xp-blue to-xp-blue-dark rounded-tr-lg shadow-2xl overflow-hidden z-[100] animate-scale-in origin-bottom-left">
